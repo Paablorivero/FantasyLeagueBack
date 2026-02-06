@@ -5,6 +5,7 @@ import routerJugadores from "./routes/jugadores.routes";
 import { getPlayersFromApi} from "./footballapi/footballapi.service";
 
 import {testConnectionDB} from "./configs/dbconnection.config"
+import routerUsuarios from "./routes/usuarios.routes";
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ const app = express();
 app.use(express.json());
 
 app.use('/daznfntsy', routerJugadores);
+
+app.use('/daznfntsy',routerUsuarios);
 
 const port = process.env.DB_PORT || 3000;
 

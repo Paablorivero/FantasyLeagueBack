@@ -3,8 +3,7 @@ import {sequelize} from "../configs/dbconnection.config";
 
 
 class Jugador extends Model{
-    declare id: CreationOptional<number>;
-    declare jugadorId: number;
+    declare jugadorId: CreationOptional<number>;
     declare nombre: string;
     declare firstName: string;
     declare lastName: string;
@@ -13,22 +12,15 @@ class Jugador extends Model{
     declare lesionado: boolean;
     declare foto: string;
     declare equipoProfesional: number
-};
+}
 
 Jugador.init(
     {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true,
-            field: 'system_id',
-        },
+
 
         jugadorId: {
           type: DataTypes.INTEGER,
-          unique: true,
-          allowNull: false,
+          primaryKey: true,
           field: 'jugador_id',
         },
 
@@ -51,7 +43,7 @@ Jugador.init(
         },
 
         edad: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
             field: 'edad',
         },

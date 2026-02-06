@@ -3,11 +3,11 @@ import {getAllJugadores, getAllJugadoresByTeam, getJugadorByJugadorId} from "../
 
 const routerJugadores: Router = Router();
 
-routerJugadores.get("/jugadores", getAllJugadores);
+routerJugadores.get("/jugadores/equipo/:equipoProfesional", getAllJugadoresByTeam);
 
 routerJugadores.get("/jugadores/:jugadorId", getJugadorByJugadorId);
 
-routerJugadores.get("/jugadores/equipo/:equipoProfesional", getAllJugadoresByTeam);
+routerJugadores.get("/jugadores", getAllJugadores);
 
 export default routerJugadores;
 
