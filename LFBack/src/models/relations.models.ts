@@ -1,6 +1,10 @@
 import Usuario from "./usuario.models";
 import Liga from "./ligas.models";
 import Equipo from "./equipos.models";
+import Jornada from "./jornadas.models";
+import Temporada from "./temporadas.models";
+import Alineacion from "./alineaciones.models";
+import Jugador from "./jugadores.model";
 
 // En este archivo vamos a tener simplemente las asociaciones que existen entre las diferentes entidades
 // Una vez hecho, simplemente debemos importar y llamar a esta función en app.ts
@@ -14,4 +18,16 @@ export function relationsModels(){
 
     Liga.hasMany(Equipo, {foreignKey: 'ligaId'});
     Equipo.belongsTo(Liga, {foreignKey: 'ligaId'});
+
+    Temporada.hasMany(Jornada, {foreignKey: 'jornadaId'});
+    Jornada.belongsTo(Temporada, {foreignKey: 'jornadaId'});
+
+    Equipo.hasMany(Alineacion, {foreignKey: 'equipoId'});
+    Jornada.hasMany(Alineacion, {foreignKey: 'jornadaId'});
+    Jugador.hasMany(Alineacion, {foreignKey: 'jugadorId'});
+
+    Alineacion.belongsTo(Jornada, {foreignKey: 'jornadaId'});
+    Alineacion.belongsTo(Equipo, {foreignKey: 'equipoId'});
+    Alineacion.belongsTo(Jugador, {foreignKey: 'jugadorId'});
+
 }
