@@ -2,6 +2,8 @@ import {Request, Response} from 'express';
 
 import Usuario from "../models/usuario.models";
 import {Op} from "sequelize";
+import Equipo from "../models/equipos.models";
+import Liga from "../models/ligas.models";
 
 export async function registrarNuevoUsuario(req: Request, res: Response) {
     try {
@@ -109,4 +111,32 @@ export async function obtenerUsuarioPorNombreDeUsuario(req: Request, res: Respon
     const usuarioObtenido = await Usuario.findOne({where: {username: username}});
 
     res.status(200).json(usuarioObtenido);
+}
+
+export async function obtenerEquiposDelUsuarioYLigas(req: Request, res: Response) {
+    const usuarioSeleccionado = req.params.usuarioId;
+
+    if(!usuarioSeleccionado || typeof usuarioSeleccionado !== 'string'){
+        return res.status(400).json({
+            error: 'Error al introducir la id a buscar'
+        });
+    }
+
+    const usuarioYEqupos = Usuario.findByPk(usuarioSeleccionado, {
+        attributes: ["username"],
+        include: [
+            {
+                model: Equipo,
+                attributes: ['nombre'],
+                include: [
+                    {
+                        model: Liga,
+                        attributes: ['nombreLiga'],
+                    }
+                ]
+            }
+        ]
+        }
+
+    )
 }
