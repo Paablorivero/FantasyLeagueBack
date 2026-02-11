@@ -10,6 +10,8 @@ import routerLigas from "./routes/ligas.routes";
 
 import {relationsModels} from "./models/relations.models";
 import routerEquipos from "./routes/equipos.routes";
+import routerTemporadas from "./routes/temporadas.routes";
+import routerJornadas from "./routes/jornadas.routes";
 
 dotenv.config();
 
@@ -26,6 +28,10 @@ app.use('/daznfntsy',routerUsuarios);
 app.use('/daznfntsy', routerLigas);
 
 app.use('/daznfntsy', routerEquipos);
+
+app.use('/daznfntsy', routerTemporadas);
+
+app.use('/daznfntsy', routerJornadas);
 
 const port = process.env.DB_PORT || 3000;
 
