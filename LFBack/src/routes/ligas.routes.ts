@@ -4,6 +4,9 @@ import {
     obtenerListadoLigasConPlazasDisponibles,
     registrarLigaPorUnUsuario
 } from "../controllers/ligas.controllers";
+import {validateStringParams} from "../middleware/validateStringParams.middleware";
+import {emptyFields} from "../middleware/emptyFields.middleware";
+import {existsUsuario} from "../middleware/userExistence.middleware";
 
 
 const routerLigas: Router = Router();
@@ -12,7 +15,7 @@ routerLigas.get("/ligas/all", obtenerListadoDeLigas);
 
 routerLigas.get("/ligas/disponibles", obtenerListadoLigasConPlazasDisponibles);
 
-routerLigas.post("/ligas/crear/:usuarioId", registrarLigaPorUnUsuario);
+routerLigas.post("/ligas/crear/:usuarioId", validateStringParams(["usuarioId"]), emptyFields(["nombre"]), existsUsuario, registrarLigaPorUnUsuario);
 
 
 export default routerLigas;

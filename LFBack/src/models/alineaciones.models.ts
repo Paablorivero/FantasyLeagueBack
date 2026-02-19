@@ -3,8 +3,8 @@ import {sequelize} from '../configs/dbconnection.config';
 
 class Alineacion extends Model{
     declare equipoId: string;
-    declare jugadorId: string;
-    declare jornadaId: string;
+    declare jugadorId: number;
+    declare jornadaId: number;
     declare puntuacion: number;
 }
 
@@ -18,14 +18,14 @@ Alineacion.init(
       },
 
         jugadorId: {
-          type: DataTypes.UUID,
+          type: DataTypes.INTEGER,
             primaryKey: true,
             field: 'jugador_id',
             allowNull: false,
         },
 
         jornadaId: {
-          type: DataTypes.UUID,
+          type: DataTypes.INTEGER,
             primaryKey: true,
             field: 'jornada_id',
             allowNull: false,

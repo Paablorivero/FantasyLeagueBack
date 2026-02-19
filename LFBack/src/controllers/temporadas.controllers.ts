@@ -5,7 +5,7 @@ export async function getAllTemporadas(req: Request, res: Response) {
     try {
         const listadoTemporadas = await Temporada.findAll();
 
-        if (!listadoTemporadas) {
+        if (listadoTemporadas.length === 0) {
             return res.status(200).json({
                 error: 'No se han encontrado registros de temporadas'
             });

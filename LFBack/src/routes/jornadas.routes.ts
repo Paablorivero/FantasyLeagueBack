@@ -5,16 +5,18 @@ import {
     createJornada,
     updateJornada, getJornadaByFecha,
 } from "../controllers/jornadas.controllers";
+import {validateNumericParam} from "../middleware/validateNumericParam.middleware";
+import {validateDatesInitEnd} from "../middleware/validateDatesInitEnd.middleware";
 
 const routerJornadas: Router = Router();
 
 routerJornadas.get("/jornadas", getAllJornadas);
 
-routerJornadas.get("/jornadas/:id", getJornadaById);
+routerJornadas.get("/jornadas/:jornadaId", validateNumericParam("jornadaId"), getJornadaById);
 
-routerJornadas.post("/jornadas", createJornada);
+routerJornadas.post("/jornadas", validateDatesInitEnd("fInicio", "fFin"), createJornada);
 
-routerJornadas.put("/jornadas/update/:id", updateJornada);
+routerJornadas.put("/jornadas/update/:id", validateNumericParam("jornadaId"), validateDatesInitEnd("fInicio", "fFin"), updateJornada);
 
 routerJornadas.get("/jornadas/fecha/:fInicio", getJornadaByFecha);
 

@@ -12,6 +12,7 @@ import {relationsModels} from "./models/relations.models";
 import routerEquipos from "./routes/equipos.routes";
 import routerTemporadas from "./routes/temporadas.routes";
 import routerJornadas from "./routes/jornadas.routes";
+import {errorHandler} from "./middleware/errorHandler.middleware";
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.use('/daznfntsy', routerEquipos);
 app.use('/daznfntsy', routerTemporadas);
 
 app.use('/daznfntsy', routerJornadas);
+
+app.use(errorHandler);
 
 const port = process.env.DB_PORT || 3000;
 

@@ -19,8 +19,8 @@ export function relationsModels(){
     Liga.hasMany(Equipo, {foreignKey: 'ligaId'});
     Equipo.belongsTo(Liga, {foreignKey: 'ligaId'});
 
-    Temporada.hasMany(Jornada, {foreignKey: 'jornadaId'});
-    Jornada.belongsTo(Temporada, {foreignKey: 'jornadaId'});
+    Temporada.hasMany(Jornada, {foreignKey: 'temporadaId'});
+    Jornada.belongsTo(Temporada, {foreignKey: 'temporadaId'});
 
     Equipo.hasMany(Alineacion, {foreignKey: 'equipoId'});
     Jornada.hasMany(Alineacion, {foreignKey: 'jornadaId'});

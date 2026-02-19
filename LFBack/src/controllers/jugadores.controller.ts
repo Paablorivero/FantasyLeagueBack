@@ -1,5 +1,6 @@
 import Jugador from "../models/jugadores.model";
 import { Request, Response } from "express";
+import Equipo from "../models/equipos.models";
 
 
 export async function getAllJugadores(req: Request, res: Response) {
@@ -15,14 +16,7 @@ export async function getAllJugadores(req: Request, res: Response) {
 }
 
 export async function getJugadorByJugadorId(req: Request, res: Response) {
-    const idJugador = Number(req.params.jugadorId);
-
-    if(Number.isNaN(idJugador)){
-        return res.status(400).json({
-            error: 'El parámetro de id del jugador debe de ser un valor numérico'
-        });
-
-    }
+    const idJugador = res.locals.jugadorId;
 
     const existeJugador = await Jugador.findOne({where: {jugadorId: idJugador}});
 
@@ -37,16 +31,9 @@ export async function getJugadorByJugadorId(req: Request, res: Response) {
 }
 
 export async function getAllJugadoresByTeam(req: Request, res: Response) {
-    const idEquipo = Number(req.params.equipoProfesional);
+    const idEquipo = res.locals.equipoProfesional;
 
-    if(Number.isNaN(idEquipo)){
-        return res.status(400).json({
-            error: 'Se debe de insertar un id de equipo en un formato válido'
-        });
-
-    }
-
-    const existeEquipo = await Jugador.findOne({where: {equipoProfesional: idEquipo}});
+    const existeEquipo = await Equipo.findOne({where: {equipoProfesional: idEquipo}});
 
     if(!existeEquipo){
         return res.status(404).json({

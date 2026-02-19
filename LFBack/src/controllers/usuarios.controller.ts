@@ -7,7 +7,8 @@ import Liga from "../models/ligas.models";
 
 export async function registrarNuevoUsuario(req: Request, res: Response) {
     try {
-        const { username, email, fechaNacimiento } = req.body;
+        const { username, email} = req.body;
+        const fechaNacimiento = res.locals.fechaNacimiento;
         console.log("Por aquí en principio deberiamos de ir bien");
 
 
@@ -27,7 +28,7 @@ export async function registrarNuevoUsuario(req: Request, res: Response) {
         const usuarioCreado = await Usuario.create({
             username,
             email,
-            fechaNacimiento: fechaNacimiento,
+            fechaNacimiento,
         });
 
         return res.status(201).json(usuarioCreado);
@@ -59,11 +60,11 @@ export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
 }
 
 
-export async function obtenerUsuarioPorId(req: Request, res: Response) {
+export function obtenerUsuarioPorId(req: Request, res: Response) {
     try {
         const usuarioId = res.locals.usuarioId;
 
-        const usuarioObtenido = await Usuario.findByPk(usuarioId);
+        const usuarioObtenido = res.locals.usuario;
 
         if(!usuarioObtenido) {
             return res.status(404).json({

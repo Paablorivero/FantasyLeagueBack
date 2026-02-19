@@ -10,7 +10,7 @@ import Liga from "../models/ligas.models";
 export async function obtenerListadoDeLigas(req: Request, res: Response) {
     const listadoLigas = await Liga.findAll();
 
-    if(!listadoLigas) {
+    if(listadoLigas.length === 0) {
         res.status(200).json({
             error: 'Petición correcta. No existen datos para mostrar'
         });
@@ -49,23 +49,9 @@ export async function obtenerListadoLigasConPlazasDisponibles(req: Request, res:
 }
 
 export async function registrarLigaPorUnUsuario(req: Request, res: Response) {
-    const usuarioId = req.params.usuarioId;
-
-    if(!usuarioId || typeof usuarioId !== 'string') {
-        res.status(400).json({
-            error: 'Mal formato de la id del usuario'
-        });
-        return;
-    }
+    const usuarioId = res.locals.usuarioId;
 
     const nombreLiga = req.body.nombre;
-
-    if(!nombreLiga || typeof nombreLiga !== 'string') {
-        res.status(400).json({
-            error: 'Mal formato para el nombre de una liga'
-        });
-        return;
-    }
 
     const nuevaLiga = await Liga.create({
         nombreLiga,
