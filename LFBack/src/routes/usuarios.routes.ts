@@ -31,11 +31,28 @@ const routerUsuarios: Router = Router();
 
 // A partir de aquí, acciones de usuario normal.
 
+
+
+/**
+ * @swagger
+ * /users/me:
+ *   get:
+ *     summary: Obtener usuario autenticado
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *       401:
+ *         description: No autenticado
+ */
 routerUsuarios.get(
     '/users/me',
     userExistFromJWT,
     obtenerUsuarioPorId
 );
+
 
 routerUsuarios.get(
     '/users/username/:username',
@@ -43,10 +60,34 @@ routerUsuarios.get(
     obtenerUsuarioPorNombreDeUsuario
 );
 
-routerUsuarios.get('/users', adminAuthMiddleware, obtenerTodosLosUsuarios);
+routerUsuarios.get('/users/all', adminAuthMiddleware, obtenerTodosLosUsuarios);
 
 routerUsuarios.get('/users/equipos/participacion', userExistFromJWT, obtenerEquiposDelUsuarioYLigas);
 
+
+/**
+ * @swagger
+ * /users/me/update:
+ *   patch:
+ *     summary: Modificar datos del usuario
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado
+ */
 routerUsuarios.patch('/users/me/update', userExistFromJWT, modificarUsuario);
 
 

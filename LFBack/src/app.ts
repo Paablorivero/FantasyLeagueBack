@@ -6,6 +6,10 @@ import { getPlayersFromApi} from "./footballapi/footballapi.service";
 
 import {testConnectionDB} from "./configs/dbconnection.config"
 
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc = require("swagger-jsdoc");
+import {swaggerSpec} from "./configs/swaggerjsdoc.config";
+
 import routerUsuarios from "./routes/usuarios.routes";
 import routerLigas from "./routes/ligas.routes";
 import routerEquipos from "./routes/equipos.routes";
@@ -27,21 +31,21 @@ relationsModels();
 
 app.use(express.json());
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use("/daznfntsy", routerAuth);
 
-app.use(authMiddleware);
+app.use('/daznfntsy', authMiddleware, routerUsuarios);
 
-app.use('/daznfntsy',routerUsuarios);
+app.use('/daznfntsy/jugadores', authMiddleware, routerJugadores);
 
-app.use('/daznfntsy', routerJugadores);
+app.use('/daznfntsy/ligas', authMiddleware, routerLigas);
 
-app.use('/daznfntsy', routerLigas);
+app.use('/daznfntsy/equipos', authMiddleware, routerEquipos);
 
-app.use('/daznfntsy', routerEquipos);
+app.use('/daznfntsy/temporadas', authMiddleware, routerTemporadas);
 
-app.use('/daznfntsy', routerTemporadas);
-
-app.use('/daznfntsy', routerJornadas);
+app.use('/daznfntsy/jornadas', authMiddleware, routerJornadas);
 
 app.use(errorHandler);
 

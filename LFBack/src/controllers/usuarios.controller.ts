@@ -108,7 +108,7 @@ export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
 export function obtenerUsuarioPorId(req: Request, res: Response) {
     try {
 
-        const usuarioObtenido = res.locals.jwtUser;
+        const usuarioObtenido = res.locals.usuario;
 
         if(!usuarioObtenido) {
             return res.status(404).json({

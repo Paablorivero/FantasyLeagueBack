@@ -3,7 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 import Usuario from "../models/usuario.models";
 
 export async function userExistFromJWT(req: Request, res: Response, next: NextFunction) {
-    const usuarioId = res.locals.usuario.sub;
+    const usuarioId = res.locals.jwtUser.sub;
 
     const usuario = await Usuario.findByPk(usuarioId);
 
