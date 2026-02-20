@@ -6,7 +6,7 @@ import {
 } from "../controllers/ligas.controllers";
 import {validateStringParams} from "../middleware/validateStringParams.middleware";
 import {emptyFields} from "../middleware/emptyFields.middleware";
-import {existsUsuario} from "../middleware/userExistence.middleware";
+import {existsUsuario} from "../middleware/legacy/userExistence.middleware";
 import {ligaExists} from "../middleware/ligaExists.middleware";
 import {ligaPlazasLibres} from "../middleware/ligaPlazasLibres.middleware";
 

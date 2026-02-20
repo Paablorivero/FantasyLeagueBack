@@ -6,7 +6,7 @@ import {
 } from "../controllers/equipos.controllers";
 import {validateStringParams} from "../middleware/validateStringParams.middleware";
 import {ligaPlazasLibres} from "../middleware/ligaPlazasLibres.middleware";
-import {existsUsuario} from "../middleware/userExistence.middleware";
+import {existsUsuario} from "../middleware/legacy/userExistence.middleware";
 
 const routerEquipos: Router = Router();
 

@@ -1,0 +1,19 @@
+import {Request, Response, NextFunction} from 'express';
+
+import Usuario from "../models/usuario.models";
+
+export async function userExistFromJWT(req: Request, res: Response, next: NextFunction) {
+    const usuarioId = res.locals.usuario.sub;
+
+    const usuario = await Usuario.findByPk(usuarioId);
+
+    if (!usuario) {
+        return res.status(404).json({
+            error: "El usuario no existe"
+        });
+    }
+
+    res.locals.usuario = usuario;
+
+    next();
+}

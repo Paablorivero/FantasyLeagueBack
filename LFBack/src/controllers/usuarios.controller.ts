@@ -107,13 +107,12 @@ export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
 
 export function obtenerUsuarioPorId(req: Request, res: Response) {
     try {
-        const usuarioId = res.locals.usuarioId;
 
-        const usuarioObtenido = res.locals.usuario;
+        const usuarioObtenido = res.locals.jwtUser;
 
         if(!usuarioObtenido) {
             return res.status(404).json({
-                error: `No existe un usuario con la ID ${ usuarioId }`
+                error: `No existe un usuario seleccionado`
             })
         }
 
@@ -142,15 +141,9 @@ export async function obtenerUsuarioPorNombreDeUsuario(req: Request, res: Respon
 }
 
 export async function obtenerEquiposDelUsuarioYLigas(req: Request, res: Response) {
-    const usuarioSeleccionado = req.params.usuarioId;
+    const usuario = res.locals.jwtUser;
 
-    if(!usuarioSeleccionado || typeof usuarioSeleccionado !== 'string'){
-        return res.status(400).json({
-            error: 'Error al introducir la id a buscar'
-        });
-    }
-
-    const usuarioYEqupos = Usuario.findByPk(usuarioSeleccionado, {
+    const usuarioYEqupos = await Usuario.findByPk(usuario.usuarioId, {
         attributes: ["username"],
         include: [
             {
@@ -166,5 +159,39 @@ export async function obtenerEquiposDelUsuarioYLigas(req: Request, res: Response
         ]
         }
 
-    )
+    );
+
+    res.status(200).json(usuarioYEqupos);
+}
+
+export async function modificarUsuario(req: Request, res: Response) {
+
+    const usuarioId = res.locals.jwtUser.sub;
+
+    const {username, email} = req.body;
+
+    const emailExist = await Usuario.findOne({where: {email: email}});
+
+    if (emailExist) {
+        return res.status(400).json({
+            error: 'Este email ya pertenece a otro usuario'
+        });
+    }
+
+    const usuario = await Usuario.findByPk(usuarioId);
+
+    if(!usuario) {
+        return res.status(401).json({
+            error: 'No existe un usuario'
+        });
+    }
+
+    await usuario.update({
+        username,
+        email,
+    });
+
+    return res.status(200).json({
+        message: 'Datos del usuario actualizados correctamente'
+    });
 }

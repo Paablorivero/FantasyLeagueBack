@@ -37,7 +37,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     //     Hasta ahora yo he trabajado con res.locals. Por el momento voy a seguir así para no tocar demasiadas cosas
     //     que dan pie a meter la pata.
 
-        res.locals.user = decoded;
+        res.locals.jwtUser = decoded;
         // Si llega hasta aquí todo correcto, que pase al siguiente middleware
         next();
     }catch(e){

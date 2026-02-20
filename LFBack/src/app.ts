@@ -5,16 +5,19 @@ import routerJugadores from "./routes/jugadores.routes";
 import { getPlayersFromApi} from "./footballapi/footballapi.service";
 
 import {testConnectionDB} from "./configs/dbconnection.config"
+
 import routerUsuarios from "./routes/usuarios.routes";
 import routerLigas from "./routes/ligas.routes";
-
-import {relationsModels} from "./models/relations.models";
 import routerEquipos from "./routes/equipos.routes";
 import routerTemporadas from "./routes/temporadas.routes";
 import routerJornadas from "./routes/jornadas.routes";
+import routerAuth from "./routes/auth.routes";
+
+import {relationsModels} from "./models/relations.models";
 import {errorHandler} from "./middleware/errorHandler.middleware";
 
 import {authMiddleware} from "./middleware/authmiddleware/auth.middleware";
+
 
 dotenv.config();
 
@@ -24,10 +27,11 @@ relationsModels();
 
 app.use(express.json());
 
-app.use('/daznfntsy',routerUsuarios);
+app.use("/daznfntsy", routerAuth);
 
 app.use(authMiddleware);
 
+app.use('/daznfntsy',routerUsuarios);
 
 app.use('/daznfntsy', routerJugadores);
 
