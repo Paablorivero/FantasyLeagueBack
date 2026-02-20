@@ -5,8 +5,8 @@ import Liga from "../models/ligas.models";
 
 
 export async function registrarNuevoEquipoEnUnaLiga(req: Request, res: Response) {
-    const ligaSeleccionada = req.params.ligaId;
-    const usuarioPropietario = req.params.usuarioId;
+    const ligaSeleccionada = res.locals.ligaId;
+    const usuarioPropietario = res.locals.usuarioId;
 
     if(!ligaSeleccionada || typeof ligaSeleccionada !== "string") {
         return res.status(400).send({

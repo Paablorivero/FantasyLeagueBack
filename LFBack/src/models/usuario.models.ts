@@ -7,6 +7,7 @@ class Usuario extends Model{
     declare usuarioId: CreationOptional<string>;
     declare username: string;
     declare email: string;
+    declare passwordHash: string;
     declare fechaNacimiento: Date
 }
 
@@ -31,6 +32,12 @@ Usuario.init(
             allowNull: false,
             unique: true,
             field: 'email',
+        },
+
+        passwordHash: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+          field: 'password_hash',
         },
 
         fechaNacimiento: {

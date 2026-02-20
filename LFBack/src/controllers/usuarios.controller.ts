@@ -5,12 +5,16 @@ import {Op} from "sequelize";
 import Equipo from "../models/equipos.models";
 import Liga from "../models/ligas.models";
 
+import bcrypt from "bcrypt";
+
+// Por ahora el registro y el login van aquí. Más adelante posiblemente será más recomendable dejarlo en su propio routes y controller
+
 export async function registrarNuevoUsuario(req: Request, res: Response) {
     try {
-        const { username, email} = req.body;
+        const { username, email, password} = req.body;
         const fechaNacimiento = res.locals.fechaNacimiento;
-        console.log("Por aquí en principio deberiamos de ir bien");
 
+        const hash = await bcrypt.hash(password, 10);
 
         const existe = await Usuario.findOne({
             where: {
@@ -28,10 +32,11 @@ export async function registrarNuevoUsuario(req: Request, res: Response) {
         const usuarioCreado = await Usuario.create({
             username,
             email,
+            passwordHash: hash,
             fechaNacimiento,
         });
 
-        return res.status(201).json(usuarioCreado);
+        return res.status(201).json(`Nuevo usuario creado ${usuarioCreado.username}`);
 
     } catch (error: any) {
         console.error('ERROR AL CREAR USUARIO:', error);
@@ -42,22 +47,50 @@ export async function registrarNuevoUsuario(req: Request, res: Response) {
     }
 }
 
+export async function loginUsuario(req: Request, res: Response) {
+    const {username, password} = req.body;
+
+    try{
+        const usuario = await Usuario.findOne({
+            where: {username}
+        });
+
+        if(!usuario) {
+            return res.status(401).json({
+                error: 'Usuario inexistente'
+            });
+        }
+
+        const passwordCorrecta = await bcrypt.compare(password, usuario.passwordHash);
+
+        if(!passwordCorrecta) {
+            return res.status(401).json({
+                error: 'Password Incorrecto'
+            });
+        }
+
+        return res.status(201).json({
+            message: "Login correcto",
+            username: usuario.username
+        });
+    }catch(error){
+        return res.status(500).json({
+            error: 'Error en el login'
+        });
+    }
+}
+
+// A partir de aquí estas funciones son las que un usuario puede hacer ya cuando esté logeado
 
 export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
     try {
         const listadoUsuarios = await Usuario.findAll();
-
-        if (listadoUsuarios.length === 0) {
-            return res.status(404).json({
-                error: 'No hay ningún usuario dado de alta en el sistema actualmente'
-            })
-        }
-
-        res.status(200).json(listadoUsuarios);
+        return res.status(200).json(listadoUsuarios);
     } catch (e) {
-        console.log(e);
+        return res.status(500).json({ error: "Error al obtener usuarios" });
     }
 }
+
 
 
 export function obtenerUsuarioPorId(req: Request, res: Response) {

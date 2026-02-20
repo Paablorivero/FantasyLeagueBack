@@ -1,6 +1,6 @@
 import {Response, Request} from "express";
 import {fn, col, literal} from "sequelize";
-import sequelize from "sequelize";
+import {sequelize} from "../configs/dbconnection.config";
 
 import Equipo from "../models/equipos.models";
 import Usuario from "../models/usuario.models";
@@ -38,7 +38,7 @@ export async function obtenerListadoLigasConPlazasDisponibles(req: Request, res:
         having: literal('COUNT("Equipos"."equipo_id") < 20'),
     });
 
-    if(!ligasDisponibles) {
+    if(ligasDisponibles.length === 0) {
         res.status(200).json({
             error: 'No existe ninguna liga que cumpla con los criterios solicitados'
         });
@@ -48,15 +48,77 @@ export async function obtenerListadoLigasConPlazasDisponibles(req: Request, res:
     res.status(200).json({ligasDisponibles});
 }
 
-export async function registrarLigaPorUnUsuario(req: Request, res: Response) {
+export async function registrarLigaPorUnUsuario(req: Request, res: Response){
+
     const usuarioId = res.locals.usuarioId;
 
-    const nombreLiga = req.body.nombre;
+    const { nombreLiga, nombreEquipo } = req.body;
 
-    const nuevaLiga = await Liga.create({
-        nombreLiga,
-        usuarioId
-    });
+    const transaction = await sequelize.transaction();
 
-    res.status(201).json(nuevaLiga);
+    try {
+
+
+        const nuevaLiga = await Liga.create({
+            nombreLiga,
+            usuarioId: usuarioId
+        }, { transaction });
+
+
+        const nuevoEquipo = await Equipo.create({
+            nombre: nombreEquipo,
+            usuarioId,
+            ligaId: nuevaLiga.ligaId
+        }, { transaction });
+
+         //futura plantilla automática
+
+        await transaction.commit();
+
+        return res.status(201).json({
+            liga: nuevaLiga,
+            equipo: nuevoEquipo
+        });
+
+    } catch(e){
+
+        await transaction.rollback();
+
+        return res.status(500).json({
+            error: "Error al crear liga"
+        });
+    }
+}
+
+
+export async function unirseALiga(req: Request, res: Response){
+
+    const ligaId = res.locals.ligaId;
+    const usuarioId = res.locals.usuarioId;
+    const nombreEquipo = req.body.nombreEquipo;
+
+    const transaction = await sequelize.transaction();
+
+    try {
+
+        const equipo = await Equipo.create({
+            nombre: nombreEquipo,
+            usuarioId,
+            ligaId
+        }, { transaction });
+
+        // aquí irá generar plantilla automática
+
+        await transaction.commit();
+
+        return res.status(201).json(equipo);
+
+    } catch(e){
+
+        await transaction.rollback();
+
+        return res.status(500).json({
+            error: "Error al unirse a la liga"
+        });
+    }
 }
