@@ -7,6 +7,8 @@ import Liga from "../models/ligas.models";
 
 import bcrypt from "bcrypt";
 
+import jwt from "jsonwebtoken";
+
 // Por ahora el registro y el login van aquí. Más adelante posiblemente será más recomendable dejarlo en su propio routes y controller
 
 export async function registrarNuevoUsuario(req: Request, res: Response) {
@@ -57,7 +59,7 @@ export async function loginUsuario(req: Request, res: Response) {
 
         if(!usuario) {
             return res.status(401).json({
-                error: 'Usuario inexistente'
+                error: 'Credenciales incorrectas'
             });
         }
 
@@ -65,14 +67,24 @@ export async function loginUsuario(req: Request, res: Response) {
 
         if(!passwordCorrecta) {
             return res.status(401).json({
-                error: 'Password Incorrecto'
+                error: 'Credenciales incorrectas'
             });
         }
 
-        return res.status(201).json({
-            message: "Login correcto",
-            username: usuario.username
-        });
+        const token = jwt.sign(
+            {
+                sub: usuario.usuarioId,
+                username: usuario.username,
+                rol: usuario.rol,
+            },
+
+            process.env.JWT_SECRET!,
+            {expiresIn: 3600}
+        );
+
+        return res.status(200).json({
+            token
+        })
     }catch(error){
         return res.status(500).json({
             error: 'Error en el login'

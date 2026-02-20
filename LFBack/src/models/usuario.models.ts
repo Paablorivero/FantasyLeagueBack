@@ -8,6 +8,7 @@ class Usuario extends Model{
     declare username: string;
     declare email: string;
     declare passwordHash: string;
+    declare rol: string;
     declare fechaNacimiento: Date
 }
 
@@ -38,6 +39,13 @@ Usuario.init(
           type: DataTypes.TEXT,
           allowNull: false,
           field: 'password_hash',
+        },
+
+        rol:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "user",
+            field: 'rol',
         },
 
         fechaNacimiento: {

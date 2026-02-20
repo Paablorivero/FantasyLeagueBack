@@ -14,6 +14,8 @@ import routerTemporadas from "./routes/temporadas.routes";
 import routerJornadas from "./routes/jornadas.routes";
 import {errorHandler} from "./middleware/errorHandler.middleware";
 
+import {authMiddleware} from "./middleware/authmiddleware/auth.middleware";
+
 dotenv.config();
 
 const app = express();
@@ -22,9 +24,12 @@ relationsModels();
 
 app.use(express.json());
 
-app.use('/daznfntsy', routerJugadores);
-
 app.use('/daznfntsy',routerUsuarios);
+
+app.use(authMiddleware);
+
+
+app.use('/daznfntsy', routerJugadores);
 
 app.use('/daznfntsy', routerLigas);
 
