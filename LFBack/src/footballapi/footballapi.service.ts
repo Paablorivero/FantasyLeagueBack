@@ -3,7 +3,7 @@ import Jugador from "../models/jugadores.model";
 export async function getPlayersFromApi(){
     const temporada: number = 2024;
     const liga: number = 140;
-    const totalPaginas: number = 3;
+    const totalPaginas: number = 37;
 
         for (let i = 1; i <= totalPaginas; i++) {
             let listadoJugadores = await fetch(`https://v3.football.api-sports.io/players?season=${temporada}&league=${liga}&page=${i}`, {
@@ -32,15 +32,15 @@ async function createOrUpdatePlayers(players: any[]){
         nombre: p.player.name,
         firstName: p.player.firstname,
         lastName: p.player.lastname,
-        edad: p.player.age,
+        edad: p.player.age ?? 1,
         nacionalidad: p.player.nationality,
         lesionado: p.player.injured,
         foto: p.player.photo,
-        equipoProfesional: p.statistics[0]?.team?.id ?? null
+        equipoProfesional: p.statistics[0].at(-1)
     }));
 
     await Jugador.bulkCreate(jugadoresMapeados, {
-        updateOnDuplicate: ['edad', 'lesionado', 'foto', 'equipoProfesional'],
+        updateOnDuplicate: ['lesionado', 'foto', 'equipoProfesional'],
     });
 
 }
