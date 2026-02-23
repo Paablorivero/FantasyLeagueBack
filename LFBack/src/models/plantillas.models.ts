@@ -59,7 +59,7 @@ Plantilla.init(
 
         precioVenta: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             field: "precio_venta"
         },
 

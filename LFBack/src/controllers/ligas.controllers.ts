@@ -5,6 +5,7 @@ import {sequelize} from "../configs/dbconnection.config";
 import Equipo from "../models/equipos.models";
 import Usuario from "../models/usuario.models";
 import Liga from "../models/ligas.models";
+import { crearLigaConEquipo } from "../services/crearLigaConEquipo.service";
 
 
 export async function obtenerListadoDeLigas(req: Request, res: Response) {
@@ -48,44 +49,27 @@ export async function obtenerListadoLigasConPlazasDisponibles(req: Request, res:
     res.status(200).json({ligasDisponibles});
 }
 
-export async function registrarLigaPorUnUsuario(req: Request, res: Response){
-
-    const usuarioId = res.locals.usuarioId;
-
-    const { nombreLiga, nombreEquipo } = req.body;
-
-    const transaction = await sequelize.transaction();
-
-    try {
 
 
-        const nuevaLiga = await Liga.create({
-            nombreLiga,
-            usuarioId: usuarioId
-        }, { transaction });
+export async function registrarLigaPorUnUsuario(req: Request,res: Response ){
 
+    try{
 
-        const nuevoEquipo = await Equipo.create({
-            nombre: nombreEquipo,
+        const usuarioId = res.locals.jwtUser.sub;
+
+        const { nombreLiga, nombreEquipo } = req.body;
+
+        const result = await crearLigaConEquipo({
             usuarioId,
-            ligaId: nuevaLiga.ligaId
-        }, { transaction });
-
-         //futura plantilla automática
-
-        await transaction.commit();
-
-        return res.status(201).json({
-            liga: nuevaLiga,
-            equipo: nuevoEquipo
+            nombreLiga,
+            nombreEquipo
         });
 
-    } catch(e){
+        return res.status(201).json(result);
 
-        await transaction.rollback();
-
+    }catch(error){
         return res.status(500).json({
-            error: "Error al crear liga"
+            error: "Error creando liga"
         });
     }
 }

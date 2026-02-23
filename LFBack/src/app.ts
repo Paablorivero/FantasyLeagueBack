@@ -39,7 +39,7 @@ app.use('/daznfntsy', authMiddleware, routerUsuarios);
 
 app.use('/daznfntsy/jugadores', authMiddleware, routerJugadores);
 
-app.use('/daznfntsy/ligas', authMiddleware, routerLigas);
+app.use('/daznfntsy', authMiddleware, routerLigas);
 
 app.use('/daznfntsy/equipos', authMiddleware, routerEquipos);
 

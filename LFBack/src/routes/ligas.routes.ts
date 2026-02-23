@@ -9,6 +9,7 @@ import {emptyFields} from "../middleware/emptyFields.middleware";
 import {existsUsuario} from "../middleware/legacy/userExistence.middleware";
 import {ligaExists} from "../middleware/ligaExists.middleware";
 import {ligaPlazasLibres} from "../middleware/ligaPlazasLibres.middleware";
+import {authMiddleware} from "../middleware/authmiddleware/auth.middleware";
 
 
 const routerLigas: Router = Router();
@@ -18,10 +19,8 @@ routerLigas.get("/ligas/all", obtenerListadoDeLigas);
 routerLigas.get("/ligas/disponibles", obtenerListadoLigasConPlazasDisponibles);
 
 routerLigas.post(
-    "/ligas/crear/:usuarioId",
-    validateStringParams(["usuarioId"]),
-    existsUsuario,
-    emptyFields(["nombre"]),
+    "/ligas",
+    emptyFields(["nombreLiga", "nombreEquipo"]),
     registrarLigaPorUnUsuario
 );
 

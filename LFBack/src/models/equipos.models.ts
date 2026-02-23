@@ -27,7 +27,7 @@ Equipo.init(
 
         logo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             field: 'logo'
         },
 
