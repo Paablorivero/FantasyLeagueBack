@@ -34,9 +34,7 @@ export async function crearLigaConEquipo(data: {
         }, { transaction: transaction });
 
         // Aquí el sorteo de equipo inicial
-        await sorteoInicial(liga.ligaId, equipo.equipoID, 1,
-            transaction
-        );
+        await sorteoInicial(liga.ligaId, equipo.equipoID, 1, transaction);
 
         // Aquí, se espera a que se haga el commit de la transaction.
         await transaction.commit();
@@ -46,7 +44,6 @@ export async function crearLigaConEquipo(data: {
 
     //     Aquí la parte importante. Si por alguna razón hay un error. La operación se deshace.
     } catch (error) {
-        console.error(error);
         await transaction.rollback();
         throw error;
     }

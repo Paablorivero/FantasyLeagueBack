@@ -25,9 +25,9 @@ routerLigas.post(
 );
 
 routerLigas.post(
-    "/ligas/:ligaId/unirse/:usuarioId",
-    validateStringParams(["ligaId","usuarioId"]),
-    existsUsuario,
+    "/ligas/unirse/:ligaId",
+    emptyFields(["nombreEquipo"]),
+    validateStringParams(["ligaId"]),
     ligaExists,
     ligaPlazasLibres,
     unirseALiga

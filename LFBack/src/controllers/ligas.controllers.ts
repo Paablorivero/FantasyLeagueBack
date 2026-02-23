@@ -6,6 +6,7 @@ import Equipo from "../models/equipos.models";
 import Usuario from "../models/usuario.models";
 import Liga from "../models/ligas.models";
 import { crearLigaConEquipo } from "../services/crearLigaConEquipo.service";
+import {unirseLigaConEquipo} from "../services/unirseLigaConEquipo.service";
 
 
 export async function obtenerListadoDeLigas(req: Request, res: Response) {
@@ -78,22 +79,19 @@ export async function registrarLigaPorUnUsuario(req: Request,res: Response ){
 export async function unirseALiga(req: Request, res: Response){
 
     const ligaId = res.locals.ligaId;
-    const usuarioId = res.locals.usuarioId;
-    const nombreEquipo = req.body.nombreEquipo;
+    const usuarioId = res.locals.jwtUser.sub;
+    const { nombreEquipo, logo} = req.body;
 
     const transaction = await sequelize.transaction();
 
     try {
 
-        const equipo = await Equipo.create({
-            nombre: nombreEquipo,
+        const equipo = await unirseLigaConEquipo({
+            nombreEquipo: nombreEquipo,
+            logo,
             usuarioId,
             ligaId
-        }, { transaction });
-
-        // aquí irá generar plantilla automática
-
-        await transaction.commit();
+        });
 
         return res.status(201).json(equipo);
 
