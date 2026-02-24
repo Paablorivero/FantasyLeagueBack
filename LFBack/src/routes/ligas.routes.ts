@@ -10,6 +10,7 @@ import {existsUsuario} from "../middleware/legacy/userExistence.middleware";
 import {ligaExists} from "../middleware/ligaExists.middleware";
 import {ligaPlazasLibres} from "../middleware/ligaPlazasLibres.middleware";
 import {authMiddleware} from "../middleware/authmiddleware/auth.middleware";
+import {userTeamExistsInLiga} from "../middleware/userTeamExistsInLiga.middleware";
 
 
 const routerLigas: Router = Router();
@@ -29,6 +30,7 @@ routerLigas.post(
     emptyFields(["nombreEquipo"]),
     validateStringParams(["ligaId"]),
     ligaExists,
+    userTeamExistsInLiga,
     ligaPlazasLibres,
     unirseALiga
 );
