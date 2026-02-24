@@ -16,4 +16,6 @@ export async function userTeamExistsInLiga(req: Request, res: Response, next: Ne
             error:"Ya tienes un equipo en esta liga"
         });
     }
+
+    next();
 }

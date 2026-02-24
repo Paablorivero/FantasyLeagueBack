@@ -53,15 +53,70 @@ routerUsuarios.get(
     obtenerUsuarioPorId
 );
 
-
+/**
+ * @swagger
+ * /users/username/{username}:
+ *   get:
+ *     summary: Obtener un usuario por su nombre de usuario
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre de usuario a buscar
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado correctamente
+ *       404:
+ *         description: No existe un usuario con ese nombre
+ *       400:
+ *         description: Parámetro inválido
+ */
 routerUsuarios.get(
     '/users/username/:username',
     validateStringParams(["username"]),
     obtenerUsuarioPorNombreDeUsuario
 );
 
+/**
+ * @swagger
+ * /users/all:
+ *   get:
+ *     summary: Obtener listado completo de usuarios (solo admin)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Listado de usuarios obtenido correctamente
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso solo para administradores
+ */
 routerUsuarios.get('/users/all', adminAuthMiddleware, obtenerTodosLosUsuarios);
 
+
+/**
+ * @swagger
+ * /users/equipos/participacion:
+ *   get:
+ *     summary: Obtener equipos y ligas en las que participa el usuario autenticado
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Participaciones del usuario obtenidas correctamente
+ *       401:
+ *         description: Token inválido o usuario no autenticado
+ *       404:
+ *         description: Usuario no encontrado
+ */
 routerUsuarios.get('/users/equipos/participacion', userExistFromJWT, obtenerEquiposDelUsuarioYLigas);
 
 
