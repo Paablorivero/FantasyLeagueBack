@@ -2,9 +2,9 @@ import Jugador from "../models/jugadores.model";
 import EquipoProfesional from "../models/equiposProfesionales.models";
 
 export async function getPlayersFromApi(){
-    const temporada: number = 2024;
+    const temporada: number = 2025;
     const liga: number = 140;
-    const totalPaginas: number = 100;
+    const totalPaginas: number = 37;
 
         for (let i = 1; i <= totalPaginas; i++) {
             let listadoJugadores = await fetch(`https://v3.football.api-sports.io/players?season=${temporada}&league=${liga}&page=${i}`, {

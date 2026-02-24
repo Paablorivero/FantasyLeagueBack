@@ -33,25 +33,25 @@ Jugador.init(
 
         firstName: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             field: 'first_name',
         },
 
         lastName: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             field: 'last_name',
         },
 
         fechaNacimiento: {
           type: DataTypes.DATEONLY,
-          allowNull: false,
+          allowNull: true,
           field: 'fecha_nacimiento',
         },
 
         nacionalidad: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             field: 'nacionalidad',
         },
 
@@ -64,7 +64,7 @@ Jugador.init(
 
         foto: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             field: 'foto',
         },
 

@@ -40,7 +40,7 @@ Alineacion.init(
     {
         sequelize,
         modelName: "Alineacion",
-        tableName: "Alineaciones",
+        tableName: "alineaciones",
         timestamps: false,
     },
 );

@@ -2,6 +2,7 @@ import  {sequelize}  from "../configs/dbconnection.config";
 import Liga from "../models/ligas.models";
 import Equipo from "../models/equipos.models";
 import {sorteoInicial} from "./sorteoPlantilla.service";
+import {crearAlineacionInicial} from "./crearAlineacionInicial.service";
 
 // Este servicio está pensado para que la crear una liga, se cree también un equipo. Usa transactions. Pero la versión managed
 // de sequelize. Eso, aunque posiblemente no nos hiciese falta para resolver bien el proyecto, se supone que nos protege de
@@ -35,6 +36,9 @@ export async function crearLigaConEquipo(data: {
 
         // Aquí el sorteo de equipo inicial
         await sorteoInicial(liga.ligaId, equipo.equipoID, 1, transaction);
+
+        // Una vez creado el servicio creo una alineación inicial
+        await crearAlineacionInicial(equipo.equipoID, 1, transaction);
 
         // Aquí, se espera a que se haga el commit de la transaction.
         await transaction.commit();

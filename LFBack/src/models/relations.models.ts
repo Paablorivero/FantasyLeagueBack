@@ -31,11 +31,11 @@ export function relationsModels(){
     Alineacion.belongsTo(Equipo, {foreignKey: 'equipoId'});
     Alineacion.belongsTo(Jugador, {foreignKey: 'jugadorId'});
 
-    Equipo.hasMany(Plantilla, { foreignKey: "equipoId" });
-    Plantilla.belongsTo(Equipo, { foreignKey: "equipoId" });
+    Equipo.hasMany(Plantilla, { foreignKey: "equipoUuid" });
+    Plantilla.belongsTo(Equipo, { foreignKey: "equipoUuid" });
 
-    Jugador.hasMany(Plantilla, { foreignKey: "jugadorId" });
-    Plantilla.belongsTo(Jugador, { foreignKey: "jugadorId" });
+    Jugador.hasMany(Plantilla, { foreignKey: "jugadorPro" });
+    Plantilla.belongsTo(Jugador, { foreignKey: "jugadorPro" });
 
     Liga.hasMany(Plantilla, { foreignKey: "ligaId" });
     Plantilla.belongsTo(Liga, { foreignKey: "ligaId" });
@@ -45,5 +45,6 @@ export function relationsModels(){
         foreignKey: "ligaId",
         otherKey: "usuarioId"
     });
+
 
 }

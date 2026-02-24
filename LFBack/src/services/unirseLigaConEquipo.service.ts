@@ -2,6 +2,7 @@ import  {sequelize}  from "../configs/dbconnection.config";
 import Liga from "../models/ligas.models";
 import Equipo from "../models/equipos.models";
 import {sorteoInicial} from "./sorteoPlantilla.service";
+import {crearAlineacionInicial} from "./crearAlineacionInicial.service";
 
 export async function unirseLigaConEquipo(data:{
     nombreEquipo: string;
@@ -21,6 +22,8 @@ export async function unirseLigaConEquipo(data:{
         }, {transaction: transaction});
 
         await sorteoInicial(equipo.ligaId, equipo.equipoID,1, transaction);
+
+        await crearAlineacionInicial(equipo.equipoID, 1, transaction);
 
         await transaction.commit();
 

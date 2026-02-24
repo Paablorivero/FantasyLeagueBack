@@ -7,7 +7,6 @@ import { getPlayersFromApi} from "./footballapi/footballapi.service";
 import {testConnectionDB} from "./configs/dbconnection.config"
 
 import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc = require("swagger-jsdoc");
 import {swaggerSpec} from "./configs/swaggerjsdoc.config";
 
 import routerUsuarios from "./routes/usuarios.routes";
@@ -15,6 +14,7 @@ import routerLigas from "./routes/ligas.routes";
 import routerEquipos from "./routes/equipos.routes";
 import routerTemporadas from "./routes/temporadas.routes";
 import routerJornadas from "./routes/jornadas.routes";
+import routerAlineaciones from "./routes/alineaciones.routes";
 import routerAuth from "./routes/auth.routes";
 
 import {relationsModels} from "./models/relations.models";
@@ -37,15 +37,17 @@ app.use("/daznfntsy", routerAuth);
 
 app.use('/daznfntsy', authMiddleware, routerUsuarios);
 
-app.use('/daznfntsy/jugadores', authMiddleware, routerJugadores);
-
 app.use('/daznfntsy', authMiddleware, routerLigas);
 
-app.use('/daznfntsy/equipos', authMiddleware, routerEquipos);
+app.use('/daznfntsy', authMiddleware, routerAlineaciones);
 
-app.use('/daznfntsy/temporadas', authMiddleware, routerTemporadas);
+app.use('/daznfntsy', authMiddleware, routerJugadores);
 
-app.use('/daznfntsy/jornadas', authMiddleware, routerJornadas);
+app.use('/daznfntsy', authMiddleware, routerEquipos);
+
+app.use('/daznfntsy', authMiddleware, routerTemporadas);
+
+app.use('/daznfntsy', authMiddleware, routerJornadas);
 
 app.use(errorHandler);
 
