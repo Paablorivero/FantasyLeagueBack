@@ -1,12 +1,13 @@
 import {Response, Request} from "express";
-import {fn, col, literal} from "sequelize";
+import { col, literal} from "sequelize";
 import {sequelize} from "../configs/dbconnection.config";
+import {QueryTypes} from "sequelize";
 
 import Equipo from "../models/equipos.models";
-import Usuario from "../models/usuario.models";
 import Liga from "../models/ligas.models";
 import { crearLigaConEquipo } from "../services/crearLigaConEquipo.service";
 import {unirseLigaConEquipo} from "../services/unirseLigaConEquipo.service";
+import Usuario from "../models/usuario.models";
 
 
 export async function obtenerListadoDeLigas(req: Request, res: Response) {
@@ -103,4 +104,43 @@ export async function unirseALiga(req: Request, res: Response){
             error: "Error al unirse a la liga"
         });
     }
+}
+
+export async function clasificacionLiga(req: Request, res: Response){
+
+    const ligaId = res.locals.ligaId;
+
+    const clasificacion = await sequelize.query(
+        `SELECT *
+        FROM clasificacion_ligas
+        WHERE liga_id = :ligaId
+        ORDER BY puntos DESC`,
+        {
+            replacements: {ligaId},
+            type: QueryTypes.SELECT,
+        }
+    );
+
+    res.status(200).json(clasificacion);
+}
+
+export async function participantesLiga(req: Request, res: Response){
+    const ligaId = res.locals.ligaId;
+
+    const liga = await Liga.findByPk(ligaId,{
+        include:[
+            {
+                model: Equipo,
+                attributes:["nombre"],
+                include:[
+                    {
+                        model: Usuario,
+                        attributes:["username"]
+                    }
+                ]
+            }
+        ]
+    });
+
+    res.status(200).json(liga);
 }

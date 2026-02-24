@@ -1,7 +1,8 @@
 import {Router} from 'express';
 import {
+    clasificacionLiga,
     obtenerListadoDeLigas,
-    obtenerListadoLigasConPlazasDisponibles,
+    obtenerListadoLigasConPlazasDisponibles, participantesLiga,
     registrarLigaPorUnUsuario, unirseALiga
 } from "../controllers/ligas.controllers";
 import {validateStringParams} from "../middleware/validateStringParams.middleware";
@@ -34,5 +35,9 @@ routerLigas.post(
     ligaPlazasLibres,
     unirseALiga
 );
+
+routerLigas.get("/ligas/:ligaId/clasificacion", validateStringParams(["ligaId"]), ligaExists, clasificacionLiga);
+
+routerLigas.get("/ligas/:ligaId/participantes", validateStringParams(["ligaId"]), ligaExists, participantesLiga);
 
 export default routerLigas;
