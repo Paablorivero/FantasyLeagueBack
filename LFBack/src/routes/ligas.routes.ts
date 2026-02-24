@@ -31,7 +31,6 @@ routerLigas.post(
     emptyFields(["nombreEquipo"]),
     validateStringParams(["ligaId"]),
     ligaExists,
-    userTeamExistsInLiga,
     ligaPlazasLibres,
     unirseALiga
 );
