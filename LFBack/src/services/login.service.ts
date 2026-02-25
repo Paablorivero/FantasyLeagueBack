@@ -12,9 +12,17 @@ export async function loginService(username: string, password: string){
 
     if(!ok) throw new Error("Credenciales");
 
-    return jwt.sign({
+    const token = jwt.sign({
         sub: usuario.usuarioId,
-        username: usuario.username,
         rol: usuario.rol
     }, process.env.JWT_SECRET!, {expiresIn: 3600});
+
+    return {
+        token,
+        user:{
+            uuid: usuario.usuarioId,
+            username: usuario.username,
+            rol: usuario.rol
+        }
+    };
 }
