@@ -21,9 +21,9 @@ export async function unirseLigaConEquipo(data:{
             ligaId: data.ligaId,
         }, {transaction: transaction});
 
-        await sorteoInicial(equipo.ligaId, equipo.equipoID,1, transaction);
+        await sorteoInicial(equipo.ligaId, equipo.equipoId,1, transaction);
 
-        await crearAlineacionInicial(equipo.equipoID, 1, transaction);
+        await crearAlineacionInicial(equipo.equipoId, 1, transaction);
 
         await transaction.commit();
 

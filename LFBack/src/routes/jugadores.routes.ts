@@ -4,6 +4,7 @@ import {validateNumericParam} from "../middleware/validateNumericParam.middlewar
 
 const routerJugadores: Router = Router();
 
+
 routerJugadores.get("/jugadores/equipo/:equipoProfesional", validateNumericParam("equipoProfesional"), getAllJugadoresByTeam);
 
 routerJugadores.get("/jugadores/:jugadorId", validateNumericParam("jugadorId"), getJugadorByJugadorId);

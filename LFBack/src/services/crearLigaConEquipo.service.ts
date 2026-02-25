@@ -35,10 +35,10 @@ export async function crearLigaConEquipo(data: {
         }, { transaction: transaction });
 
         // Aquí el sorteo de equipo inicial
-        await sorteoInicial(liga.ligaId, equipo.equipoID, 1, transaction);
+        await sorteoInicial(liga.ligaId, equipo.equipoId, 1, transaction);
 
         // Una vez creado el servicio creo una alineación inicial
-        await crearAlineacionInicial(equipo.equipoID, 1, transaction);
+        await crearAlineacionInicial(equipo.equipoId, 1, transaction);
 
         // Aquí, se espera a que se haga el commit de la transaction.
         await transaction.commit();

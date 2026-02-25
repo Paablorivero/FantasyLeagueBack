@@ -3,7 +3,7 @@ import {sequelize} from "../configs/dbconnection.config";
 import Usuario from "./usuario.models";
 
 class Equipo extends Model{
-    declare equipoID: CreationOptional<string>;
+    declare equipoId: CreationOptional<string>;
     declare nombre: string;
     declare logo: string;
     declare usuarioId: string;
@@ -12,7 +12,7 @@ class Equipo extends Model{
 
 Equipo.init(
     {
-        equipoID: {
+        equipoId: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,

@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { obtenerAlineacionActual } from "../controllers/alineaciones.controllers";
+import {actualizarAlineacion, obtenerAlineacionActual} from "../controllers/alineaciones.controllers";
 import { validateStringParams } from "../middleware/validateStringParams.middleware";
 
 const routerAlineaciones = Router();
 
 routerAlineaciones.get(
-    "/alineaciones/actual/:equipoId",
+    "/alineaciones/actual/:equipoId/:jornadaId",
     validateStringParams(["equipoId"]),
     obtenerAlineacionActual
 );
+
+routerAlineaciones.put("/alineaciones/:jornadaId", validateStringParams(["equipoId"]), actualizarAlineacion);
 
 export default routerAlineaciones;
