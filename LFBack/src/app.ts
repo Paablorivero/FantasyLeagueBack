@@ -22,12 +22,19 @@ import {errorHandler} from "./middleware/errorHandler.middleware";
 
 import {authMiddleware} from "./middleware/authmiddleware/auth.middleware";
 
+import cors from "cors";
+
 
 dotenv.config();
 
 const app = express();
 
 relationsModels();
+
+app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true
+}));
 
 app.use(express.json());
 
