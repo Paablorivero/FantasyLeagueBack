@@ -48,7 +48,7 @@ export async function obtenerListadoLigasConPlazasDisponibles(req: Request, res:
         return;
     }
 
-    res.status(200).json({ligasDisponibles});
+    res.status(200).json(ligasDisponibles);
 }
 
 

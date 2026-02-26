@@ -6,12 +6,12 @@ import {validateStringParams} from "../middleware/validateStringParams.middlewar
 
 const routerTemporadas: Router = Router();
 
-routerTemporadas.post("/temporadas/create", validateDatesInitEnd("fInicio", "fFin"), createTemporada);
+// routerTemporadas.post("/temporadas/create", validateDatesInitEnd("fInicio", "fFin"), createTemporada);
 
 routerTemporadas.get("/temporadas/:temporadaId", validateNumericParam("temporadaId"), getTemporadaById);
 
-routerTemporadas.get("/temporadas/fecha/:fInicio", validateStringParams(["fInicio"]), getTemporadaByFecha);
+// routerTemporadas.get("/temporadas/fecha/:fInicio", validateStringParams(["fInicio"]), getTemporadaByFecha);
 
-routerTemporadas.get("/temporadas/get",getAllTemporadas);
+// routerTemporadas.get("/temporadas/get",getAllTemporadas);
 
 export default routerTemporadas;

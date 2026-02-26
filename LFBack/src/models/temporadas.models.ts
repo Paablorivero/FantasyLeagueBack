@@ -5,6 +5,7 @@ class Temporada extends Model{
     declare temporadaId: CreationOptional<number>;
     declare fInicio: Date;
     declare fFin: Date;
+    declare jornadaActual: number;
 }
 
 Temporada.init(
@@ -26,6 +27,12 @@ Temporada.init(
             type: DataTypes.DATEONLY,
             allowNull: false,
             field: 'f_fin'
+        },
+
+        jornadaActual: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            field: 'jornada_actual'
         },
 
     },
