@@ -52,6 +52,12 @@ export async function actualizarAlineacion(req: Request, res: Response){
     const jornadaId = Number(req.params.jornadaId);
     const { jugadores } = req.body;
 
+    if (!Array.isArray(jugadores)) {
+        return res.status(400).json({
+            error: "El campo jugadores debe ser un array de IDs"
+        });
+    }
+
     await guardarAlineacion(equipoId, jornadaId, jugadores);
 
     return res.status(200).json({message: "Alineación actualizada"});

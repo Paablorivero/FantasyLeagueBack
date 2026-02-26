@@ -35,7 +35,7 @@ export async function getTemporadaById(req: Request, res: Response) {
     const id = Number(req.params.temporadaId);
 
     if(!id || Number.isNaN(id)) {
-        res.status(400).json({
+        return res.status(400).json({
             error: 'Mal formato de la temporadaId para realizar la peticion'
         });
     }
@@ -43,11 +43,11 @@ export async function getTemporadaById(req: Request, res: Response) {
     const temporada = await Temporada.findByPk(id);
 
     if (!temporada) {
-        res.status(200).json({
+        return res.status(404).json({
             error: 'No se ha devuelto ningún resultado que coincida con la búsqueda'
         });
     }
-    res.status(200).json(temporada);
+    return res.status(200).json(temporada);
 
 }
 

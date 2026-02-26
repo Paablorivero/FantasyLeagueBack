@@ -7,7 +7,7 @@ import {crearAlineacionInicial} from "./crearAlineacionInicial.service";
 export async function unirseLigaConEquipo(data:{
     nombreEquipo: string;
     usuarioId: string;
-    logo: string;
+    logo?: string;
     ligaId: string;
 }){
 
@@ -16,7 +16,7 @@ export async function unirseLigaConEquipo(data:{
     try{
         const equipo = await Equipo.create({
             nombre: data.nombreEquipo,
-            logo: data.logo,
+            logo: data.logo ?? null,
             usuarioId: data.usuarioId,
             ligaId: data.ligaId,
         }, {transaction: transaction});

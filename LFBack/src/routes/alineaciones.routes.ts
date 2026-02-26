@@ -10,6 +10,10 @@ routerAlineaciones.get(
     obtenerAlineacionActual
 );
 
-routerAlineaciones.put("/alineaciones/:jornadaId", validateStringParams(["equipoId"]), actualizarAlineacion);
+routerAlineaciones.put(
+    "/alineaciones/:equipoId/:jornadaId",
+    validateStringParams(["equipoId"]),
+    actualizarAlineacion
+);
 
 export default routerAlineaciones;

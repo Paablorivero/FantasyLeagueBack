@@ -16,6 +16,7 @@ import routerTemporadas from "./routes/temporadas.routes";
 import routerJornadas from "./routes/jornadas.routes";
 import routerAlineaciones from "./routes/alineaciones.routes";
 import routerAuth from "./routes/auth.routes";
+import routerPlantillas from "./routes/plantillas.routes";
 
 import {relationsModels} from "./models/relations.models";
 import {errorHandler} from "./middleware/errorHandler.middleware";
@@ -48,6 +49,8 @@ app.use('/daznfntsy', authMiddleware, routerUsuarios);
 app.use('/daznfntsy', authMiddleware, routerLigas);
 
 app.use('/daznfntsy', authMiddleware, routerAlineaciones);
+
+app.use('/daznfntsy', authMiddleware, routerPlantillas);
 
 app.use('/daznfntsy', authMiddleware, routerJugadores);
 

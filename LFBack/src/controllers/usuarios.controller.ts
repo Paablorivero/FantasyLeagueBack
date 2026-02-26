@@ -54,11 +54,9 @@ export async function loginUsuario(req: Request, res: Response) {
     const {username, password} = req.body;
 
     try{
-        const token = await loginService(username, password);
+        const loginData = await loginService(username, password);
 
-        return res.status(200).json({
-            token
-        })
+        return res.status(200).json(loginData);
     }catch(error){
         return res.status(401).json({
             error: 'Error en el login'
@@ -122,11 +120,11 @@ export async function obtenerEquiposDelUsuarioYLigas(req: Request, res: Response
         include: [
             {
                 model: Equipo,
-                attributes: ['nombre'],
+                attributes: ['equipoId', 'nombre', 'ligaId'],
                 include: [
                     {
                         model: Liga,
-                        attributes: ['nombreLiga'],
+                        attributes: ['ligaId', 'nombreLiga'],
                     }
                 ]
             }
@@ -142,11 +140,11 @@ export async function modificarUsuario(req: Request, res: Response) {
 
     const usuarioId = res.locals.jwtUser.sub;
 
-    const {username, email} = req.body;
+    const {username, email, fechaNacimiento} = req.body;
 
     const emailExist = await Usuario.findOne({where: {email: email}});
 
-    if (emailExist) {
+    if (emailExist && emailExist.usuarioId !== usuarioId) {
         return res.status(400).json({
             error: 'Este email ya pertenece a otro usuario'
         });
@@ -160,12 +158,16 @@ export async function modificarUsuario(req: Request, res: Response) {
         });
     }
 
-    await usuario.update({
+    const userDataToUpdate: Record<string, string> = {
         username,
         email,
-    });
+    };
 
-    return res.status(200).json({
-        message: 'Datos del usuario actualizados correctamente'
-    });
+    if (fechaNacimiento) {
+        userDataToUpdate.fechaNacimiento = fechaNacimiento;
+    }
+
+    await usuario.update(userDataToUpdate);
+
+    return res.status(200).json(usuario);
 }
