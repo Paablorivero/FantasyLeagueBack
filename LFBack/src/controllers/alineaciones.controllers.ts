@@ -18,7 +18,7 @@ export async function obtenerAlineacionActual(req: Request, res: Response){
             include:[
                 {
                     model: Jugador,
-                    as: "jugador",
+                    as: "Jugador",
                     attributes:[
                         "jugadorId",
                         "nombre",
@@ -37,7 +37,7 @@ export async function obtenerAlineacionActual(req: Request, res: Response){
 
         const jugadores = alineacion.map((a: any) => a.Jugador);
 
-        return res.status(200).json({jugadores});
+        return res.status(200).json(jugadores);
 
     }catch(e){
         console.log(e);

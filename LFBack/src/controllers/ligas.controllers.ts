@@ -95,7 +95,7 @@ export async function unirseALiga(req: Request, res: Response){
             ligaId
         });
 
-        return res.status(201).json(equipo);
+        return res.status(201).json(equipo.equipo);
 
     } catch(e){
 
