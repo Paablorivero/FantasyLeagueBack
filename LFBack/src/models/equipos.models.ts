@@ -8,6 +8,7 @@ class Equipo extends Model{
     declare logo: string;
     declare usuarioId: string;
     declare ligaId: string;
+    declare presupuesto: number;
 }
 
 Equipo.init(
@@ -45,6 +46,12 @@ Equipo.init(
                     model: 'ligas',
                     key: 'liga_id'
                 }
+        },
+
+        presupuesto: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            field: 'presupuesto'
         }
 },
     {

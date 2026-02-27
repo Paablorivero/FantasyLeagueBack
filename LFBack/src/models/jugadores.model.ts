@@ -13,6 +13,7 @@ class Jugador extends Model{
     declare foto: string;
     declare equipoProfesional: number | null;
     declare posicion: "Goalkeeper" | "Defender" | "Midfielder" | "Attacker" | null;
+    declare valor: number;
 }
 
 Jugador.init(
@@ -78,6 +79,12 @@ Jugador.init(
             type: DataTypes.STRING,
             allowNull: true,
             field: 'posicion',
+        },
+
+        valor: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            field: 'valor',
         }
 
     },

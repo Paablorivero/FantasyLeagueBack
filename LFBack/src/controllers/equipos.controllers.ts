@@ -69,3 +69,32 @@ export async function getAllEquiposByUsuario(req: Request, res: Response) {
         res.status(500).json({ error: 'Error al obtener los equipos' });
     }
 }
+
+export async function getEquipoPropioEnLiga(req: Request, res: Response) {
+    const ligaId = res.locals.ligaId ?? req.params.ligaId;
+    const usuarioId = res.locals.jwtUser?.sub;
+
+    if (!ligaId || typeof ligaId !== "string") {
+        return res.status(400).json({ error: 'Debe proporcionarse una liga válida' });
+    }
+
+    if (!usuarioId || typeof usuarioId !== "string") {
+        return res.status(401).json({ error: 'Usuario no autenticado' });
+    }
+
+    try {
+        const equipo = await Equipo.findOne({
+            where: { ligaId, usuarioId },
+            attributes: ['equipoId', 'nombre', 'logo', 'usuarioId', 'ligaId', 'presupuesto']
+        });
+
+        if (!equipo) {
+            return res.status(404).json({ error: 'No tienes equipo en esta liga' });
+        }
+
+        return res.status(200).json(equipo);
+    } catch (error) {
+        console.error('Error obteniendo equipo del usuario en liga:', error);
+        return res.status(500).json({ error: 'Error al obtener el equipo en la liga' });
+    }
+}

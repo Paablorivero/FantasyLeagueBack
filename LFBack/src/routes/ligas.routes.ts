@@ -1,6 +1,8 @@
 import {Router} from 'express';
 import {
     clasificacionLiga,
+    comprarJugadorMercado,
+    mercadoLiga,
     obtenerListadoDeLigas,
     obtenerListadoLigasConPlazasDisponibles, participantesLiga,
     registrarLigaPorUnUsuario, unirseALiga
@@ -165,5 +167,8 @@ routerLigas.get("/ligas/:ligaId/clasificacion", validateStringParams(["ligaId"])
  *         description: Liga no encontrada
  */
 routerLigas.get("/ligas/:ligaId/participantes", validateStringParams(["ligaId"]), ligaExists, participantesLiga);
+
+routerLigas.get("/ligas/:ligaId/mercado", validateStringParams(["ligaId"]), ligaExists, mercadoLiga);
+routerLigas.post("/ligas/:ligaId/mercado/comprar", validateStringParams(["ligaId"]), ligaExists, comprarJugadorMercado);
 
 export default routerLigas;

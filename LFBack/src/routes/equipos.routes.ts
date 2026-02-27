@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {
     getAllEquiposByUsuario,
     getAllEquiposLiga,
+    getEquipoPropioEnLiga,
     registrarNuevoEquipoEnUnaLiga
 } from "../controllers/equipos.controllers";
 import {validateStringParams} from "../middleware/validateStringParams.middleware";
@@ -15,5 +16,7 @@ routerEquipos.post('/equipos/crear/:ligaId/:usuarioId', validateStringParams(["l
 routerEquipos.get('/equipos/getAll/:ligaId', validateStringParams(["ligaId"]), getAllEquiposLiga);
 
 routerEquipos.get('/equipos/getAll/usuario/:usuarioId', validateStringParams(["usuarioId"]), existsUsuario, getAllEquiposByUsuario);
+
+routerEquipos.get('/equipos/mio/:ligaId', validateStringParams(["ligaId"]), getEquipoPropioEnLiga);
 
 export default routerEquipos;

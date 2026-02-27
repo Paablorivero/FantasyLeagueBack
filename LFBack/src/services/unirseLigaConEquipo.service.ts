@@ -4,6 +4,8 @@ import Equipo from "../models/equipos.models";
 import {sorteoInicial} from "./sorteoPlantilla.service";
 import {crearAlineacionInicial} from "./crearAlineacionInicial.service";
 
+const PRESUPUESTO_INICIAL_FICHAJES = 10_000_000;
+
 export async function unirseLigaConEquipo(data:{
     nombreEquipo: string;
     usuarioId: string;
@@ -24,6 +26,10 @@ export async function unirseLigaConEquipo(data:{
         await sorteoInicial(equipo.ligaId, equipo.equipoId,1, transaction);
 
         await crearAlineacionInicial(equipo.equipoId, 1, transaction);
+
+        // Presupuesto de mercado inicial fijo para arrancar los fichajes.
+        equipo.setDataValue("presupuesto", PRESUPUESTO_INICIAL_FICHAJES);
+        await equipo.save({ transaction });
 
         await transaction.commit();
 

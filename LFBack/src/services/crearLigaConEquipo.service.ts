@@ -4,6 +4,8 @@ import Equipo from "../models/equipos.models";
 import {sorteoInicial} from "./sorteoPlantilla.service";
 import {crearAlineacionInicial} from "./crearAlineacionInicial.service";
 
+const PRESUPUESTO_INICIAL_FICHAJES = 10_000_000;
+
 // Este servicio está pensado para que la crear una liga, se cree también un equipo. Usa transactions. Pero la versión managed
 // de sequelize. Eso, aunque posiblemente no nos hiciese falta para resolver bien el proyecto, se supone que nos protege de
 // posibles errores por concurrencia, de la misma forma que el singleton de java. Si hay algún fallo, se hace el rollback cancelando
@@ -39,6 +41,10 @@ export async function crearLigaConEquipo(data: {
 
         // Una vez creado el servicio creo una alineación inicial
         await crearAlineacionInicial(equipo.equipoId, 1, transaction);
+
+        // Presupuesto de mercado inicial fijo para arrancar los fichajes.
+        equipo.setDataValue("presupuesto", PRESUPUESTO_INICIAL_FICHAJES);
+        await equipo.save({ transaction });
 
         // Aquí, se espera a que se haga el commit de la transaction.
         await transaction.commit();
