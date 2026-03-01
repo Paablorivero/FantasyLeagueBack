@@ -3,8 +3,10 @@ import Liga from "../models/ligas.models";
 import Equipo from "../models/equipos.models";
 import {sorteoInicial} from "./sorteoPlantilla.service";
 import {crearAlineacionInicial} from "./crearAlineacionInicial.service";
+import {asegurarJornadaExiste, obtenerTemporadaActiva} from "./jornadaActual.service";
 
 const PRESUPUESTO_INICIAL_FICHAJES = 10_000_000;
+const PRESUPUESTO_TECNICO_SORTEO = 100_000_000;
 
 // Este servicio está pensado para que la crear una liga, se cree también un equipo. Usa transactions. Pero la versión managed
 // de sequelize. Eso, aunque posiblemente no nos hiciese falta para resolver bien el proyecto, se supone que nos protege de
@@ -33,16 +35,21 @@ export async function crearLigaConEquipo(data: {
         const equipo = await Equipo.create({
             nombre: data.nombreEquipo,
             usuarioId: data.usuarioId,
-            ligaId: liga.ligaId
+            ligaId: liga.ligaId,
+            // Presupuesto temporal para evitar negativos durante el sorteo inicial.
+            presupuesto: PRESUPUESTO_TECNICO_SORTEO,
         }, { transaction: transaction });
 
+        const temporadaActiva = await obtenerTemporadaActiva(transaction);
+        await asegurarJornadaExiste(temporadaActiva.temporadaId, temporadaActiva.jornadaActual, transaction);
+
         // Aquí el sorteo de equipo inicial
-        await sorteoInicial(liga.ligaId, equipo.equipoId, 1, transaction);
+        await sorteoInicial(liga.ligaId, equipo.equipoId, temporadaActiva.jornadaActual, transaction);
 
         // Una vez creado el servicio creo una alineación inicial
-        await crearAlineacionInicial(equipo.equipoId, 1, transaction);
+        await crearAlineacionInicial(equipo.equipoId, temporadaActiva.jornadaActual, transaction);
 
-        // Presupuesto de mercado inicial fijo para arrancar los fichajes.
+        // Presupuesto real de inicio de mercado para el juego.
         equipo.setDataValue("presupuesto", PRESUPUESTO_INICIAL_FICHAJES);
         await equipo.save({ transaction });
 

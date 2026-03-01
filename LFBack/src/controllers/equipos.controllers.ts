@@ -2,6 +2,13 @@ import {Request, Response} from "express";
 import Equipo from "../models/equipos.models";
 import Usuario from "../models/usuario.models";
 import Liga from "../models/ligas.models";
+import { sequelize } from "../configs/dbconnection.config";
+import { sorteoInicial } from "../services/sorteoPlantilla.service";
+import { crearAlineacionInicial } from "../services/crearAlineacionInicial.service";
+import { asegurarJornadaExiste, obtenerTemporadaActiva } from "../services/jornadaActual.service";
+
+const PRESUPUESTO_INICIAL_FICHAJES = 10_000_000;
+const PRESUPUESTO_TECNICO_SORTEO = 100_000_000;
 
 
 export async function registrarNuevoEquipoEnUnaLiga(req: Request, res: Response) {
@@ -22,14 +29,35 @@ export async function registrarNuevoEquipoEnUnaLiga(req: Request, res: Response)
 
     }
 
-    const nuevoEquipo = await Equipo.create({
-        nombre: req.body.nombre,
-        logo: '',
-        usuarioId: usuarioPropietario,
-        ligaId: ligaSeleccionada
-    });
+    const transaction = await sequelize.transaction();
 
-    res.status(201).send(nuevoEquipo);
+    try {
+        const nuevoEquipo = await Equipo.create({
+            nombre: req.body.nombre,
+            logo: '',
+            usuarioId: usuarioPropietario,
+            ligaId: ligaSeleccionada,
+            presupuesto: PRESUPUESTO_TECNICO_SORTEO
+        }, { transaction });
+
+        const temporadaActiva = await obtenerTemporadaActiva(transaction);
+        await asegurarJornadaExiste(temporadaActiva.temporadaId, temporadaActiva.jornadaActual, transaction);
+
+        await sorteoInicial(ligaSeleccionada, nuevoEquipo.equipoId, temporadaActiva.jornadaActual, transaction);
+        await crearAlineacionInicial(nuevoEquipo.equipoId, temporadaActiva.jornadaActual, transaction);
+
+        nuevoEquipo.setDataValue("presupuesto", PRESUPUESTO_INICIAL_FICHAJES);
+        await nuevoEquipo.save({ transaction });
+
+        await transaction.commit();
+        res.status(201).send(nuevoEquipo);
+    } catch (error) {
+        await transaction.rollback();
+        const detail = error instanceof Error ? error.message : "Error desconocido";
+        return res.status(400).json({
+            error: detail
+        });
+    }
 }
 
 export async function getAllEquiposLiga(req: Request, res: Response) {

@@ -16,7 +16,7 @@ routerJornadas.get("/jornadas/:jornadaId", validateNumericParam("jornadaId"), ge
 
 routerJornadas.post("/jornadas", validateDatesInitEnd("fInicio", "fFin"), createJornada);
 
-routerJornadas.put("/jornadas/update/:id", validateNumericParam("jornadaId"), validateDatesInitEnd("fInicio", "fFin"), updateJornada);
+routerJornadas.put("/jornadas/update/:id", validateNumericParam("id"), validateDatesInitEnd("fInicio", "fFin"), updateJornada);
 
 routerJornadas.get("/jornadas/fecha/:fInicio", getJornadaByFecha);
 

@@ -51,6 +51,7 @@ Equipo.init(
         presupuesto: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 10000000,
             field: 'presupuesto'
         }
 },

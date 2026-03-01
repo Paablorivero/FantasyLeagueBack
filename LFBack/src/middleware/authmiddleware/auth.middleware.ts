@@ -3,8 +3,6 @@ import {Request, Response, NextFunction} from 'express';
 import jwt from 'jsonwebtoken';
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-
-    console.log("SECRET:", process.env.JWT_SECRET);
 //     Por partes. Lo primero hay que obtener el header de la peticion que es donde se manda el token
     const authHeader = req.headers.authorization;
 

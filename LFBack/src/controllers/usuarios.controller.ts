@@ -68,7 +68,9 @@ export async function loginUsuario(req: Request, res: Response) {
 
 export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
     try {
-        const listadoUsuarios = await Usuario.findAll();
+        const listadoUsuarios = await Usuario.findAll({
+            attributes: ["usuarioId", "username", "email", "rol", "fechaNacimiento"]
+        });
         return res.status(200).json(listadoUsuarios);
     } catch (e) {
         return res.status(500).json({ error: "Error al obtener usuarios" });

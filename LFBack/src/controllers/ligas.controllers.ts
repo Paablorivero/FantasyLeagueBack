@@ -10,6 +10,7 @@ import Plantilla from "../models/plantillas.models";
 import { crearLigaConEquipo } from "../services/crearLigaConEquipo.service";
 import {unirseLigaConEquipo} from "../services/unirseLigaConEquipo.service";
 import Usuario from "../models/usuario.models";
+import { obtenerVersionMercadoActual } from "../services/mercadoVersion.service";
 
 interface MercadoJugadorDto {
     jugadorId: number;
@@ -76,8 +77,9 @@ export async function registrarLigaPorUnUsuario(req: Request,res: Response ){
 
     }catch(error){
         console.log(error);
+        const detail = error instanceof Error ? error.message : "Error desconocido";
         return res.status(500).json({
-            error: "Error creando liga"
+            error: `Error creando liga: ${detail}`
         });
     }
 }
@@ -193,7 +195,18 @@ export async function mercadoLiga(req: Request, res: Response) {
         }
     );
 
+    const versionMercado = await obtenerVersionMercadoActual();
+    res.setHeader("x-mercado-version", String(versionMercado));
     return res.status(200).json(jugadoresMercado);
+}
+
+export async function mercadoVersion(req: Request, res: Response) {
+    try {
+        const version = await obtenerVersionMercadoActual();
+        return res.status(200).json({ ok: true, version });
+    } catch (error) {
+        return res.status(500).json({ error: "No se pudo obtener la versión del mercado" });
+    }
 }
 
 export async function comprarJugadorMercado(req: Request, res: Response) {

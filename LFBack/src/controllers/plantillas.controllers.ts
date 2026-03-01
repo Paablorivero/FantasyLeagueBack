@@ -32,9 +32,7 @@ export async function obtenerPlantillaActual(req: Request, res: Response) {
         });
 
         if (plantilla.length === 0) {
-            return res.status(404).json({
-                error: "No existe plantilla para este equipo y jornada"
-            });
+            return res.status(200).json([]);
         }
 
         const jugadores = plantilla.map((p: any) => p.Jugador).filter(Boolean);
@@ -72,9 +70,7 @@ export async function obtenerPlantillaActiva(req: Request, res: Response) {
         });
 
         if (plantilla.length === 0) {
-            return res.status(404).json({
-                error: "No existe plantilla activa para este equipo"
-            });
+            return res.status(200).json([]);
         }
 
         const jugadores = plantilla.map((p: any) => p.Jugador).filter(Boolean);

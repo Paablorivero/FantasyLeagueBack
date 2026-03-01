@@ -62,12 +62,12 @@ app.use('/daznfntsy', authMiddleware, routerJornadas);
 
 app.use(errorHandler);
 
-const port = process.env.DB_PORT || 3000;
+const port = Number(process.env.PORT) || 3000;
 
 async function startDbConnection(){
     await testConnectionDB();
 
-    app.listen(3000, ()=> console.log(`Server started on port: 3000`));
+    app.listen(port, ()=> console.log(`Server started on port: ${port}`));
 }
 
 startDbConnection();

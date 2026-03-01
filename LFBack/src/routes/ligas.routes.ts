@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {
     clasificacionLiga,
     comprarJugadorMercado,
+    mercadoVersion,
     mercadoLiga,
     obtenerListadoDeLigas,
     obtenerListadoLigasConPlazasDisponibles, participantesLiga,
@@ -169,6 +170,7 @@ routerLigas.get("/ligas/:ligaId/clasificacion", validateStringParams(["ligaId"])
 routerLigas.get("/ligas/:ligaId/participantes", validateStringParams(["ligaId"]), ligaExists, participantesLiga);
 
 routerLigas.get("/ligas/:ligaId/mercado", validateStringParams(["ligaId"]), ligaExists, mercadoLiga);
+routerLigas.get("/ligas/:ligaId/mercado/version", validateStringParams(["ligaId"]), ligaExists, mercadoVersion);
 routerLigas.post("/ligas/:ligaId/mercado/comprar", validateStringParams(["ligaId"]), ligaExists, comprarJugadorMercado);
 
 export default routerLigas;

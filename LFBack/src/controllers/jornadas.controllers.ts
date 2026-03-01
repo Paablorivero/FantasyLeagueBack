@@ -13,7 +13,7 @@ export const getAllJornadas = async (req: Request, res: Response) => {
 
 export const getJornadaById = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
+        const id = Number(req.params.jornadaId);
 
         if (isNaN(id)) {
             return res.status(400).json({ message: "El id debe ser numérico" });
@@ -57,11 +57,11 @@ export const createJornada = async (req: Request, res: Response) => {
 export async function getJornadaByFecha(req: Request, res: Response) {
     try{
 
-        const fecha = req.params.fInicio;
+        const fInicio = req.params.fInicio;
 
-        const listadoJornada = await Jornada.findAll({where: {fecha}});
+        const listadoJornada = await Jornada.findAll({where: {fInicio}});
 
-        if (!listadoJornada) {
+        if (listadoJornada.length === 0) {
             return res.status(404).json({ message: "Jornada no encontrada"
             });
         }

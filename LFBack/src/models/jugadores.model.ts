@@ -84,6 +84,7 @@ Jugador.init(
         valor: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 1000000,
             field: 'valor',
         }
 

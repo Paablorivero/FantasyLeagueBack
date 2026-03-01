@@ -43,14 +43,14 @@ export async function crearAlineacionInicial(equipoId: string, jornadaId: number
 //     resultado
     const jugadores = plantilla.map((p:any) => p.Jugador).filter(Boolean);
 
-//     No nos vamos a complicar con formaciones así que lo que vamos a elegir es una formación 4-4-2 sencillita.
+//     Formación inicial fija 4-3-3.
 //     Para esta parte voy a usar el spread operator de los arrays de JavaScript para ir creando un nuevo arrayList a partir de los
 //     filter necesarios
     const seleccionados = [
         ...jugadores.filter(j => j.posicion === "Goalkeeper").slice(0,1),
         ...jugadores.filter(j => j.posicion === "Defender").slice(0,4),
-        ...jugadores.filter(j => j.posicion === "Midfielder").slice(0,4),
-        ...jugadores.filter(j => j.posicion === "Attacker").slice(0,2),
+        ...jugadores.filter(j => j.posicion === "Midfielder").slice(0,3),
+        ...jugadores.filter(j => j.posicion === "Attacker").slice(0,3),
     ];
 
     if(seleccionados.length !== 11){

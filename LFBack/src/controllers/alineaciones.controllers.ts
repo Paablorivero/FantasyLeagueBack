@@ -48,9 +48,21 @@ export async function obtenerAlineacionActual(req: Request, res: Response){
 }
 
 export async function actualizarAlineacion(req: Request, res: Response){
-    const equipoId = res.locals.equipoId;
+    const equipoId = req.params.equipoId;
     const jornadaId = Number(req.params.jornadaId);
     const { jugadores } = req.body;
+
+    if (!equipoId || typeof equipoId !== "string") {
+        return res.status(400).json({
+            error: "equipoId es obligatorio"
+        });
+    }
+
+    if (!Number.isFinite(jornadaId)) {
+        return res.status(400).json({
+            error: "jornadaId debe ser numérico"
+        });
+    }
 
     if (!Array.isArray(jugadores)) {
         return res.status(400).json({
@@ -58,7 +70,13 @@ export async function actualizarAlineacion(req: Request, res: Response){
         });
     }
 
-    await guardarAlineacion(equipoId, jornadaId, jugadores);
-
-    return res.status(200).json({message: "Alineación actualizada"});
+    try {
+        await guardarAlineacion(equipoId, jornadaId, jugadores);
+        return res.status(200).json({message: "Alineación actualizada"});
+    } catch (e) {
+        const detail = e instanceof Error ? e.message : "Error desconocido";
+        return res.status(400).json({
+            error: detail
+        });
+    }
 }
