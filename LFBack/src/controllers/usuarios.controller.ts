@@ -4,6 +4,8 @@ import Usuario from "../models/usuario.models";
 import {Op} from "sequelize";
 import Equipo from "../models/equipos.models";
 import Liga from "../models/ligas.models";
+import {LoginResponseDto} from "../DTOs/loginResponse.dto";
+import {UserInfoResponseDto} from "../DTOs/userInfoResponse.dto";
 
 import bcrypt from "bcrypt";
 
@@ -55,8 +57,15 @@ export async function loginUsuario(req: Request, res: Response) {
 
     try{
         const loginData = await loginService(username, password);
-
-        return res.status(200).json(loginData);
+        const userResponse: LoginResponseDto = {
+            token : loginData.token,
+            user : {
+                uuid: loginData.user.uuid,
+                username : loginData.user.username,
+                rol: loginData.user.rol,
+            }
+        }
+        return res.status(200).json(userResponse);
     }catch(error){
         return res.status(401).json({
             error: 'Error en el login'
@@ -70,8 +79,18 @@ export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
     try {
         const listadoUsuarios = await Usuario.findAll({
             attributes: ["usuarioId", "username", "email", "rol", "fechaNacimiento"]
+
         });
-        return res.status(200).json(listadoUsuarios);
+        const userListResponse: UserInfoResponseDto[] = [];
+
+        listadoUsuarios.forEach(usuario => {
+            const fullUser: UserInfoResponseDto = limpiarDatosDeRespuesta(usuario);
+            userListResponse.push(fullUser);
+        });
+
+        console.log(userListResponse);
+        return res.status(200).json(userListResponse);
+
     } catch (e) {
         return res.status(500).json({ error: "Error al obtener usuarios" });
     }
@@ -90,7 +109,9 @@ export function obtenerUsuarioPorId(req: Request, res: Response) {
             })
         }
 
-        res.status(200).json(usuarioObtenido);
+        const usuario: UserInfoResponseDto = limpiarDatosDeRespuesta(usuarioObtenido);
+
+        res.status(200).json(usuario);
     } catch (e) {
         console.log(e);
     }
@@ -108,7 +129,9 @@ export async function obtenerUsuarioPorNombreDeUsuario(req: Request, res: Respon
             })
         }
 
-        res.status(200).json(usuarioObtenido);
+        const usuarioLimpio: UserInfoResponseDto = limpiarDatosDeRespuesta(usuarioObtenido);
+
+        res.status(200).json(usuarioLimpio);
     } catch (e) {
         console.log(e);
     }
@@ -135,7 +158,9 @@ export async function obtenerEquiposDelUsuarioYLigas(req: Request, res: Response
 
     );
 
-    res.status(200).json(usuarioYEqupos);
+    const cleanData = JSON.parse(JSON.stringify(usuarioYEqupos));
+
+    res.status(200).json(cleanData);
 }
 
 export async function modificarUsuario(req: Request, res: Response) {
@@ -172,4 +197,24 @@ export async function modificarUsuario(req: Request, res: Response) {
     await usuario.update(userDataToUpdate);
 
     return res.status(200).json(usuario);
+}
+
+/**
+ *
+ * @param usuario
+ * El parámetro usuario son los datos que devuelve sequelize al hacer una consulta, por lo que viene con metadatos propios de las realaciones y de la
+ * base de datos que no queremos.
+ * El método retorna los datos limpios para devolverlo, sin elementos adicionales. Con la fecha trabajada para devolverla en el formato que
+ * nos es más cómodo.
+ */
+function limpiarDatosDeRespuesta(usuario: any){
+    const usuarioLimpio: UserInfoResponseDto = {
+        email: usuario.email,
+        fechaNacimiento: usuario.fechaNacimiento ? new Date(usuario.fechaNacimiento).toISOString() : null,
+        rol: usuario.rol,
+        username: usuario.username,
+        usuarioId: usuario.usuarioId,
+    }
+
+    return usuarioLimpio;
 }
