@@ -1,0 +1,43 @@
+# Dependencias
+node_modules/
+
+# Compilación (TypeScript)
+dist/
+build/
+
+# Variables de entorno (¡Muy importante!)
+.env
+
+# Logs y temporales
+npm-debug.log*
+yarn-error.log*
+.DS_Store
+
+# --- IDEs y Editores de Texto ---
+
+# JetBrains (WebStorm, IntelliJ, PhpStorm, etc.)
+.idea/
+*.iwb
+*.iws
+*.iml
+
+# Visual Studio Code
+.vscode/
+# Si quieres compartir las extensiones recomendadas o el debugger, 
+# podrías ignorar todo excepto extensions.json y launch.json:
+# .vscode/*
+# !.vscode/extensions.json
+# !.vscode/launch.json
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# VIM
+*.swp
+*.swo
+*~
+
+# --- Archivos del Sistema ---
+.DS_Store
+Thumbs.db
