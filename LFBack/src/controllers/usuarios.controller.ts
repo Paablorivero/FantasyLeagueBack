@@ -17,7 +17,7 @@ import {loginService} from "../services/login.service";
 export async function registrarNuevoUsuario(req: Request, res: Response) {
     try {
         const { username, email, password} = req.body;
-        const fechaNacimiento = res.locals.fechaNacimiento;
+        const fechaNacimiento: string = res.locals.fechaNacimiento;
 
         const hash = await bcrypt.hash(password, 10);
 
