@@ -2,6 +2,7 @@ import { Router } from "express";
 import { registrarNuevoUsuario, loginUsuario } from "../controllers/usuarios.controller";
 import { emptyFields } from "../middleware/emptyFields.middleware";
 import { fechaValidate } from "../middleware/fechaValidate.middleware";
+import { validateUsernameLength} from "../middleware/validateUsernameLength.middleware";
 
 const routerAuth = Router();
 
@@ -41,6 +42,7 @@ const routerAuth = Router();
 routerAuth.post(
     "/auth/register",
     emptyFields(["username","email","password","fechaNacimiento"]),
+    validateUsernameLength,
     fechaValidate(),
     registrarNuevoUsuario
 );
@@ -72,6 +74,7 @@ routerAuth.post(
 routerAuth.post(
     "/auth/login",
     emptyFields(["username","password"]),
+    validateUsernameLength,
     loginUsuario
 );
 

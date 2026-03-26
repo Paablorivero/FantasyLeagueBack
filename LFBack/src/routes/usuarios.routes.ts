@@ -10,6 +10,7 @@ import {
 import {validateStringParams} from "../middleware/validateStringParams.middleware";
 import {userExistFromJWT} from "../middleware/userExistFromJWT.middleware";
 import {adminAuthMiddleware} from "../middleware/adminAuth.middleware";
+import {validateUsernameLength} from "../middleware/validateUsernameLength.middleware";
 
 const routerUsuarios: Router = Router();
 
@@ -143,7 +144,7 @@ routerUsuarios.get('/users/equipos/participacion', userExistFromJWT, obtenerEqui
  *       200:
  *         description: Usuario actualizado
  */
-routerUsuarios.patch('/users/me/update', userExistFromJWT, modificarUsuario);
+routerUsuarios.patch('/users/me/update', userExistFromJWT, validateUsernameLength, modificarUsuario);
 
 
 export default routerUsuarios;

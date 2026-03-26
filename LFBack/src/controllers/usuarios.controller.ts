@@ -81,12 +81,8 @@ export async function obtenerTodosLosUsuarios(req: Request, res: Response) {
             attributes: ["usuarioId", "username", "email", "rol", "fechaNacimiento"]
 
         });
-        const userListResponse: UserInfoResponseDto[] = [];
 
-        listadoUsuarios.forEach(usuario => {
-            const fullUser: UserInfoResponseDto = limpiarDatosDeRespuesta(usuario);
-            userListResponse.push(fullUser);
-        });
+        const userListResponse: UserInfoResponseDto[] = listadoUsuarios.map(usuario => limpiarDatosDeRespuesta(usuario));
 
         console.log(userListResponse);
         return res.status(200).json(userListResponse);
@@ -113,7 +109,7 @@ export function obtenerUsuarioPorId(req: Request, res: Response) {
 
         res.status(200).json(usuario);
     } catch (e) {
-        console.log(e);
+        res.status(500).json({ error: "Error al obtener usuarios" });
     }
 }
 
@@ -158,18 +154,24 @@ export async function obtenerEquiposDelUsuarioYLigas(req: Request, res: Response
 
     );
 
-    const cleanData = JSON.parse(JSON.stringify(usuarioYEqupos));
+    if(!usuarioYEqupos){
+        return res.status(404).json({
+            error:"No existen datos para el usuario buscado"
+        });
+    }
+
+    const cleanData = usuarioYEqupos.get({plain : true});
 
     res.status(200).json(cleanData);
 }
 
 export async function modificarUsuario(req: Request, res: Response) {
 
-    const usuarioId = res.locals.jwtUser.sub;
+    const usuarioId: string = res.locals.jwtUser.sub;
 
     const {username, email, fechaNacimiento} = req.body;
 
-    const emailExist = await Usuario.findOne({where: {email: email}});
+    const emailExist: Usuario | null = await Usuario.findOne({where: {email: email}});
 
     if (emailExist && emailExist.usuarioId !== usuarioId) {
         return res.status(400).json({
@@ -177,7 +179,7 @@ export async function modificarUsuario(req: Request, res: Response) {
         });
     }
 
-    const usuario = await Usuario.findByPk(usuarioId);
+    const usuario: Usuario | null = await Usuario.findByPk(usuarioId);
 
     if(!usuario) {
         return res.status(401).json({
@@ -196,7 +198,9 @@ export async function modificarUsuario(req: Request, res: Response) {
 
     await usuario.update(userDataToUpdate);
 
-    return res.status(200).json(usuario);
+    const userCleanData: UserInfoResponseDto = limpiarDatosDeRespuesta(usuario);
+
+    return res.status(200).json(userCleanData);
 }
 
 /**
